@@ -24,12 +24,18 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-  
+
 class Registration(models.Model):
+    
+    STATUS_CHOICES = [
+    ('active', 'Active'),
+    ('cancelled', 'Cancelled')
+] 
+
     event = models.ForeignKey(Event, on_delete = models.CASCADE)
     participant = models.ForeignKey(User, on_delete = models.CASCADE)
     registered_at = models.DateTimeField(auto_now_add = True)
-    status = models.CharField(max_length=20, choices= models.STATUS_CHOICES, default="active")
+    status = models.CharField(max_length=20, choices= STATUS_CHOICES, default="active")
 
 class Meta:
     unique_together = ("event", "participant")
