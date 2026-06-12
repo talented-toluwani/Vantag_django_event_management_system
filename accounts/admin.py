@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Event, Registration
+from events.models import Category, Event, Registration
 
 # Register your models here.
 
@@ -11,7 +11,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ["title","description", "date", "location", "capacity","category" "is_cancelled" ]
+    list_display = ["title","description", "date", "location", "capacity","category", "is_cancelled" ]
     list_filter = ["created_by", "category", "is_cancelled"]
     search_fields = ["title", "location"]
 

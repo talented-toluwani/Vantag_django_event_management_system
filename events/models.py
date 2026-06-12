@@ -26,7 +26,6 @@ class Event(models.Model):
         return self.title
 
 class Registration(models.Model):
-    
     STATUS_CHOICES = [
     ('active', 'Active'),
     ('cancelled', 'Cancelled')
@@ -37,8 +36,8 @@ class Registration(models.Model):
     registered_at = models.DateTimeField(auto_now_add = True)
     status = models.CharField(max_length=20, choices= STATUS_CHOICES, default="active")
 
-class Meta:
-    unique_together = ("event", "participant")
+    class Meta:
+        unique_together = ("event", "participant")
 
     def __str__(self):
-        return "f{self.particpant} - {self.event}"
+        return f"{self.participant} - {self.event}"
