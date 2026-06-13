@@ -60,7 +60,7 @@ ROOT_URLCONF = 'vantag.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,3 +126,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#after successful login, django sends user to the events listing page
+LOGIN_REDIRECT_URL = '/events/' 
+
+#after successful logout, django sends the user back to the login page
+LOGOUT_REDIRECT_URL = '/accounts/login'
