@@ -132,3 +132,5 @@ LOGIN_REDIRECT_URL = '/events/'
 
 #after successful logout, django sends the user back to the login page
 LOGOUT_REDIRECT_URL = '/accounts/login'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'

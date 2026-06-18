@@ -1,20 +1,7 @@
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 
-class CustomUser(AbstractUser, models.TextChoices):
-    ADMIN = 'admin', "Admin"
-    PARTICIPANT = 'participant', 'Participant'
-
-    role = models.CharField(max_length=20, default= 'Participant')
-
-    def save(self, *args, **kwargs):
-        if self.role == 'admin':
-            self.is_staff = True
-        super().save(*args, **kwargs)
 
 def register(request):
     if request.method == 'POST':
