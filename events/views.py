@@ -4,6 +4,7 @@ from .models import Event, Registration
 from .forms import EventForm
 from .decorators import admin_required
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 @login_required
 def event_list(request):
@@ -86,20 +87,53 @@ def edit_event(request, pk):
 def delete_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
 
-    if request.method == "POST":
-        form = EventForm(request.POST, instance=event)
+    if request.method == "GET":#fecthes the event and renders confirmation page
         context = {
-            'form': form,
+            'event': event,
         }
-
-        if form.is_valid():
-            instance = form.save()
-
-            messages.success(request, "Event successfully deleted")
-            return redirect('event-list', pk = instance.pk)
-        
         return render(request, 'events/delete_event.html', context)
+
+    if request.method == "POST":#dletes event
+        event.delete() 
+        messages.success(request, "Event Successfully deleted")
+        return redirect('event-list')
             
-            
-        
+@login_required
+@admin_required
+def event_cancel(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+
+    if request.method == "GET":
+        context = {
+            'event': event
+        }
+        return render(request, 'events/cancel_event.html', context)
+    
+    if request.method == "POST":
+        event.is_cancelled= True
+        event.save()
+        messages.success(request, "Event has been successfully cancelled")
+        return redirect('event-detail')
+
+@require_POST         
+@login_required
+def join_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+
+    is_regitered = Registration.objects.filter(
+        event = event,
+        participant = request.user,
+        status = 'active',
+    ).exists()
+
+    context = {
+        'event': event,
+        'is_registered': is_regitered ,
+    }
+
+    return render(request, 'events/event_list', context)
+
+    
+
+ 
         
