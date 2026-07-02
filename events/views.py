@@ -5,6 +5,7 @@ from .forms import EventForm
 from .decorators import admin_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 
 @login_required
 def event_list(request):
@@ -115,25 +116,93 @@ def event_cancel(request, pk):
         messages.success(request, "Event has been successfully cancelled")
         return redirect('event-detail')
 
-@require_POST         
+        
 @login_required
+@require_POST 
 def join_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
 
-    is_regitered = Registration.objects.filter(
+    is_registered = Registration.objects.filter(
         event = event,
         participant = request.user,
         status = 'active',
+    ).exists() #checks for duplicate registration
+
+    if is_registered:
+        messages.success(request, "You are already registered for this event.")
+        return redirect('event-detail', pk=event.pk)
+    
+    active_registrations = Registration.objects.filter(
+        event = event,
+        status = 'active',
+    ).count() #checks capcity of the event
+
+    if active_registrations >= event.capacity:
+        messages.error(request, "The event has reached maximum capacity")
+        return redirect('event-detail', pk=event.pk)
+    
+    Registration.objects.create(
+        event = event,
+        participant = request.user,
+        status = 'active',
+    )
+
+    messages.success(request, "You have successfully joined the event")
+    return redirect('event-detail', pk=event.pk)
+
+@login_required
+@require_POST
+def leave_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+
+    is_registered = Registration.objects.filter(
+        event = event,
+        participant = request.user,
+        status = 'active'
     ).exists()
 
+    if not is_registered:
+        messages.error(request, "You are not registered for this event.")
+        return redirect('event-detail', pk=event.pk)
+
+
+    is_cancelled = Registration.objects.filter(
+            event = event,
+            participant = request.user,
+            status = 'active'
+        )
+    
+    is_cancelled.delete()
+    messages.success(request, "You have left the event")
+    return redirect('event-detail', pk=event.pk)
+    
+@login_required
+def my_events(request):
+    events = Event.objects.filter(
+        registration__participant = request.user, 
+        registration__status = 'active',
+        is_cancelled = False
+        )
+    
     context = {
-        'event': event,
-        'is_registered': is_regitered ,
+        'events': events,
+    }
+    return render(request, 'events/my_events.html',context)
+
+@login_required
+def upcoming_events(request):
+    events = Event.objects.filter(
+        is_cancelled = True,
+        date_field__gt.now()
+        )
+    context = {
+        'events': events,
     }
 
-    return render(request, 'events/event_list', context)
+    return render(request, 'events/upcoming_events', context)
 
     
 
  
         
+
