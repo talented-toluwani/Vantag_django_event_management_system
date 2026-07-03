@@ -1,11 +1,16 @@
+from django.utils import timezone
+
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Event, Registration
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.db.models import Q
+
+from .models import Event, Registration, Category
 from .forms import EventForm
 from .decorators import admin_required
-from django.contrib import messages
-from django.views.decorators.http import require_POST
-from django.utils import timezone
+from accounts.models import CustomUser
+
 
 @login_required
 def event_list(request):
@@ -33,7 +38,7 @@ def event_detail(request, pk):
 
 @login_required
 @admin_required
-def event_create(request):
+def create_event(request):
     if request.method == "GET":
         form = EventForm()
         context = {
@@ -101,7 +106,7 @@ def delete_event(request, pk):
             
 @login_required
 @admin_required
-def event_cancel(request, pk):
+def cancel_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
 
     if request.method == "GET":
@@ -192,17 +197,87 @@ def my_events(request):
 @login_required
 def upcoming_events(request):
     events = Event.objects.filter(
-        is_cancelled = True,
-        date_field__gt.now()
+        is_cancelled = False,
+        date__gt= timezone.now()
         )
     context = {
         'events': events,
     }
 
-    return render(request, 'events/upcoming_events', context)
+    return render(request, 'events/upcoming_events.html', context)
 
+@login_required
+def search_events(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        events = Event.objects.filter(
+             Q(title__icontains=query) | Q(location__icontains=query),
+            is_cancelled=False
+        )
     
+    else:
+        events + Event.objects.none()
 
- 
-        
+    context = {
+        'events':events,
+        'query':query,
+    }
+
+    return render(request, 'events/search_events.html', context)
+
+@login_required
+@admin_required
+def event_participants(request, pk):
+    event = get_object_or_404(Event, pk=pk )
+    registrations = Registration.objects.filter(
+        event = event
+    )
+
+    context = {
+        'event':event,
+        'registrations':registrations,
+    }
+
+    return render(request, 'events/event_participants.html', context)
+
+@login_required
+@admin_required
+def dashboard(request):
+     
+    total_events =   Event.objects.all().count(),
+    active_events = Event.objects.filter(is_cancelled = False).count(),
+    cancelled_events =  Event.objects.filter(is_cancelled = True).count(),
+    total_registrations =  Registration.objects.all().count(),
+    active_registrations = Registration.objects.filter(status = 'active').count(),
+    total_user =  CustomUser.objects.count(),
+    recent_event=  Event.objects.order_by('-created_at')[:5],
+    
+    context = {
+        'total_events': total_events,
+        'active_events': active_events,
+        'cancelled_events': cancelled_events,
+        'total_registrations': total_registrations,
+        'active_registrations':active_registrations,
+        'total_user': total_user,
+        'recent_event': recent_event,
+    }
+
+    return render(request, 'events/dashboard.html', context)
+  
+@login_required
+def events_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    event = Event.objects.filter(
+        is_cancelled = False,
+        category = category,
+        ).order_by('date')
+
+    context = {
+        'category': category,
+        'event': event,
+    }
+
+    return render(request, 'events/events_category.html', context)
+
 
