@@ -21,7 +21,7 @@ def event_list(request):
 
 @login_required
 def event_detail(request, pk):
-    #fetches event with its unique identief to edit its details
+    #fetches a single event with its unique identief to edit its details
     event = get_object_or_404(Event, pk=pk)
 
     is_registered = Registration.objects.filter(
