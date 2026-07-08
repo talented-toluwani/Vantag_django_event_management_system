@@ -14,7 +14,6 @@ def register(request):
 
             if role == 'admin':
                 user.is_staff = True
-
             else:
                 user.is_staff = False
             
