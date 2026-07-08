@@ -279,5 +279,3 @@ def events_category(request, pk):
     }
 
     return render(request, 'events/events_category.html', context)
-
-
