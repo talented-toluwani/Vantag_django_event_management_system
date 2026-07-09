@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} Eventt Detail {% endblock %}
+
+{% block content %} 
+
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class = "event-container">
+    <nav class = "sub-nav">
+    {% if request.user.is_staff %}
+    <a href= "{% url 'event-edit' event.pk %}">Edit Event</a>
+    <a href="{% url 'event-delete' event.pk %}">Delete Event</a>
+    <a href="{% url 'event-cancel' event.pk %}">Cancel Event</a>\
+    <a href="{% url 'event-participant' event.pk%}">Event Participant</a>
+    {% endif %}
+
+</div>
+{% for event in events %}
+<div class = "event-card">
+    <h2>{{event.title}}</h2>
+    <p>{{event.description}}</p>
+    <p>{{event.date}}</p> 
+    <p>{{event.location}}</p>
+    <p>{{event.capacity}}</p>
+    <p>{{event.category}}</p>
+</div>
+
+{% endblock %}
