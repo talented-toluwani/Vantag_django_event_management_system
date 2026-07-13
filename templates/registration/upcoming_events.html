@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %} Upcoming Events {% endblock title %}
+
+{% block content %}
+
+{% if messgae in messages %}
+<ul>
+    <li>{{ message }}</li>
+</ul>
+{% endif %}
+
+<h1> Upcoming Events </h1>
+
+{% endblock content %}
