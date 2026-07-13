@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Eventt Detail {% endblock %}
+{% block title %} Event Detail {% endblock %}
 
 {% block content %} 
 
@@ -13,23 +13,51 @@
 {% endif %}
 
 <div class = "event-container">
-    <nav class = "sub-nav">
-    {% if request.user.is_staff %}
-    <a href= "{% url 'event-edit' event.pk %}">Edit Event</a>
-    <a href="{% url 'event-delete' event.pk %}">Delete Event</a>
-    <a href="{% url 'event-cancel' event.pk %}">Cancel Event</a>\
-    <a href="{% url 'event-participant' event.pk%}">Event Participant</a>
-    {% endif %}
 
-</div>
-{% for event in events %}
-<div class = "event-card">
-    <h2>{{event.title}}</h2>
-    <p>{{event.description}}</p>
-    <p>{{event.date}}</p> 
-    <p>{{event.location}}</p>
-    <p>{{event.capacity}}</p>
-    <p>{{event.category}}</p>
+    <div class = "event-card">
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.description }}</p>  
+        <p>{{ event.date }}</p> 
+        <p>{{ event.location }}</p>
+        <p>{{ event.capacity }}</p>
+        <p>{{ event.category }}</p>
+        <p>{{ event.is_cancelled }}</p>
+    </div>
+
+    <nav class = "sub-nav"></nav>
+
+        {% if event.is_cancelled %}
+        <p>This event has been cancelled</p>
+        <a href="{% url 'event-list' %}"> Back to Event List</a>
+    
+        {% else %}
+            {% if request.user.is_staff %}
+            <a href= "{% url 'event-edit' event.pk %}">Edit Event</a>
+            <a href="{% url 'event-delete' event.pk %}">Delete Event</a>
+            <a href="{% url 'event-cancel' event.pk %}">Cancel Event</a>
+            <a href="{% url 'event-participants' event.pk%}">Event Participant</a>
+    
+            {% else %}
+
+                {% if is_registered %}
+                    <form action="{% url 'event-leave' event.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="action_type" value ="run_action"> Leave Event </button>
+                    </form>
+
+               {% else %}
+                    <form action="{% url 'event-join' event.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="Submit" name="action_type" value = "join_event"> Join Event </button>
+                    </form>
+
+               {% endif %}
+           {% endif %}
+        {% endif %}
+    </nav>
+
 </div>
 
 {% endblock %}
+
+<a href="{% url 'event-list' %}"> Back to Event List</a>
