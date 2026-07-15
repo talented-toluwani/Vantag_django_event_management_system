@@ -12,4 +12,10 @@
 
 <h1> Upcoming Events </h1>
 
+{% for event in events %}
+    {% include 'events/_event_card.html' %}
+{% endfor %}
+
+<a href='event-detail' event.pk>Event Detail</a>
+<a href='event-list'>Back to Event List</a>
 {% endblock content %}

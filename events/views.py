@@ -31,7 +31,7 @@ def event_detail(request, pk):
     ).exists()
 
     context = {
-        'events': event,
+        'event': event,
         'is_registered': is_registered,
         }
     return render(request, 'events/event_detail.html', context)

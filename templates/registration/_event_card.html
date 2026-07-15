@@ -1,0 +1,11 @@
+<!-- Contains event details common to all templates -->
+
+<div class = "event-card">
+    <h2>{{event.title}}</h2>
+    <p>{{event.date}}</p>
+    <p>{{event.location}}</p>
+    <p>{{event.category}}</p>
+    <p>{{event.capacity}}</p>
+</div>
+
+<a href="{% url 'event-detail' event.pk %}">Event Details</a>

@@ -15,17 +15,11 @@
 <h1> My Registered Events </h1>
 
 {% for event in events  %}
-    <div class = "event-list">
-        <h2> {{ event.title }} </h2>
-        <p> {{ event.description }}</p>
-        <p> {{ event.date }}</p>
-        <p> {{ event.capacity }}</p>
-        <p> {{ event.location }}</p>
-        <p> {{ event.category }}</p>
-        {# allows participants to get more information about an event#}
-        <a href="{% url 'event-detail'  event.pk%}">Event Details </a>
-
-    </div>
+    {% include 'events/_event_card.html' %}
+    <!-- extra template-specific details go here, after the include -->
+    <p> {{ event.description }}</p>
+    {# allows participants to get more information about an event#}
+    <a href="{% url 'event-detail'  event.pk%}">Event Details </a>
 
 {% empty %}
 <p>You are yet to register for any event</p>
