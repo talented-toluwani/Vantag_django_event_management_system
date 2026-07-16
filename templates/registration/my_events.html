@@ -4,23 +4,12 @@
 
 {% block content %}
 
-{% if messages %}
-<ul>
-    {% for message in messages  %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 <h1> My Registered Events </h1>
 
 {% for event in events  %}
     {% include 'events/_event_card.html' %}
     <!-- extra template-specific details go here, after the include -->
     <p> {{ event.description }}</p>
-    {# allows participants to get more information about an event#}
-    <a href="{% url 'event-detail'  event.pk%}">Event Details </a>
-
 {% empty %}
 <p>You are yet to register for any event</p>
 

@@ -4,18 +4,11 @@
 
 {% block content %}
 
-{% if messgae in messages %}
-<ul>
-    <li>{{ message }}</li>
-</ul>
-{% endif %}
-
 <h1> Upcoming Events </h1>
 
 {% for event in events %}
     {% include 'events/_event_card.html' %}
 {% endfor %}
 
-<a href='event-detail' event.pk>Event Detail</a>
-<a href='event-list'>Back to Event List</a>
+<a href="{% url 'event-list' %}">Back to Event's List</a>
 {% endblock content %}

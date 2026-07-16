@@ -4,16 +4,8 @@
 
 {% block content %} 
 
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{message}}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
     {% include 'events/_event_card.html' %}
-    
+
     <!-- extra template-specific details go here, after the include -->
     <p>{{ event.description }}</p>  
     <p>{{ event.is_cancelled }}</p>

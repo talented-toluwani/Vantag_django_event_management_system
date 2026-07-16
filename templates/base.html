@@ -13,7 +13,16 @@
 </head>
 
 <body>
-  {% block content %}{% endblock %}  
+<!-- Data binding to enabl views to implement messages -->
+ 
+  {% if message in messages %}
+    <ul>
+        <li>{{ message }}</li>
+    </ul>
+  {% endif %}
+
+  {% block content %}
+  {% endblock %}  
    <script src="{% static 'js/main.js' %}"></script>
 </body>
 

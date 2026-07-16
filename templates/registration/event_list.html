@@ -4,14 +4,6 @@
 
 {% block content %} 
 
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
 <div class = "event-container">
     <nav class = "sub-nav">
         {% if request.user.is_staff %}
@@ -22,10 +14,7 @@
     {% include 'events/_event_card.html' %}
 
 <!-- extra template-specific details go here, after the include -->
-
     <p> {{ event.description }}</p>
-    <a href ="{% url 'event-detail' event.pk %}"> Events Details </a>
-
 {% empty %}
 <p>No events available </p>
 

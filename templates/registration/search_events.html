@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> Search Your Events</h1>
+
+<form action="" method="get">
+    <div class="form-group">
+        <label for="user-input">Search Event:</label>
+        <!-- The 'name' attribute is what Django uses to find this data in request.POST, and it must match the name in the view -->
+        <input type="text" id="user-input" name="q" placeholder="Search Event..."  value= "{{ query }}">
+    </div>
+    <button type = "submit">Search Event</button>
+</form>
+
+<!-- Display the current search query so user knows what they searched for -->
+{% if query %}
+<p><strong>{{ query }}</strong></p>
+{% endif %}
+
+<!-- Adds the events card defined in the partial template -->
+{% for event in  events %}
+    {% include 'events/_event_card.html' %} 
+<!--This on;y renders when the event query set is empty -->
+{% empty %}
+<p>No events found matching your search</p>
+<a href="{% url 'event-list' %}">List of Events</a>
+{% endfor %}
+ 
+{% endblock content %}

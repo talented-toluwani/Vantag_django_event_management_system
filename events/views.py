@@ -212,7 +212,7 @@ def search_events(request):
 
     if query:
         events = Event.objects.filter(
-             Q(title__icontains=query) | Q(location__icontains=query),
+            Q(title__icontains=query) | Q(location__icontains=query),
             is_cancelled=False
         )
     
