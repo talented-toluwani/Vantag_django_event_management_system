@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Participants for: {{ event.title }}</h1>
+ 
+{% include 'events/_event_card.html' %}
+
+<p>{{ registration_count }} out of {{ event.capacity}} spots filled</p>
+
+#prevents multiple table for being created every time the loops complete
+ <table>
+    <!-- Header (Column Titles) -->
+        <thead>
+            <tr>
+                <th>username</th>
+                <th>email</th>
+                <th>status</th>
+                <th>registered_at</th>
+            </tr>
+         </thead>
+
+{% for registration in registrations %}       
+        <!--  Body (Data Rows) -->
+          <tbody>
+            <tr>
+                <td> {{ registration.participant.username }}</td>
+                <td>{{ registration.participant.email }}</td>
+                <td>{{ registration.status }}</td>
+                <td>{{ registration.registered_at }}</td>
+            </tr>
+          </tbody>
+    </table>
+
+{% empty %}
+<p> No participants have registered for this event yet</p>
+{% endfor %}
+
+<!-- Cancel Link-->
+<a href="{% url 'event-detail' event.pk %}">Event Details</a>
+<a href="{% url 'event-list' %}">List of Events</a>
+{% endblock content %}

@@ -226,6 +226,7 @@ def search_events(request):
 
     return render(request, 'events/search_events.html', context)
 
+
 @login_required
 @admin_required
 def event_participants(request, pk):
@@ -234,9 +235,13 @@ def event_participants(request, pk):
         event = event
     )
 
+#counts the number of registered particpants
+    registration_count = registrations.filter(status = 'active').count() 
+
     context = {
         'event':event,
         'registrations':registrations,
+        'registration_count':registration_count,
     }
 
     return render(request, 'events/event_participants.html', context)
