@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %} Admin Dashboard {% endblock title %}
+
+{% block content %}
+
+<h1>Vantag Admin Dashboard</h1>
+
+<!-- Statistics Section-->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total Events</h5>
+                <p class="card-text display-4">{{ total_events }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Active Events</h5>
+            <p class="card-test display-4">{{ active_events }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Cancelled Events</h5>
+            <p class="card-test display-4">{{cancelled_events}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="row-mt-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total Registrations</h5>
+                <p class="card-text display-4">{{total_registrations}}</p>
+            </div>
+        </div>   
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Active Registrations</h5>
+            <p class="card-text display-4">{{ active_registrations }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Total User</h5>
+            <p class="card-text display-4">{{ total_user }}</p>
+
+        </div>
+    </div>
+</div>
+
+<!-- Recent Events Section -->
+ <h2 class="mt-5">Recent Events</h2>
+<div class="row">
+    {% for event in recent_events %}
+        <div class="col-md-4">
+            {% include 'events/_event_card.html' %}
+        </div>
+    {% empty %}
+        <p>No events created yet</p>
+        <a href="{% url 'event-create' %}">Create Your First Event</a>
+    {% endfor %}
+</div>
+
+<!-- Quick Actions Section -->
+<h2 class="mt-5">Quick Actions</h2>
+<div class="mt-3">
+    <a href="{% url 'event-create' %}" class="btn btn-primary">Create New Event</a>
+    <a href="{% url 'event-list' %}" class="btn btn-secondary">View All Events</a>
+    <a href="{% url 'event-upcoming' %}" class="btn btn-info">View Upcoming Events</a>
+</div>
+
+{% endblock content %}
