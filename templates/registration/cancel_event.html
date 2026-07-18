@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} Cancel event:{{ event.tittle }} {% endblock title %}
+
+{% block content %}
+<h1>Cancel Event</h1>
+<h3>Are you sure you want to cancel this event?All registered participants will be affected</h3>
+
+<!-- Add similar event details -->
+{% include "events/_event_card.html" %}
+<p>{{ registration_count }} is the number of registered events for this event</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <button type="submit">Yes, Cancel Event?</button>
+</form>
+
+<!-- Cancel Link -->
+ <a href="{% url 'event-detail' event.pk %}">Event Details </a>
+
+{% endblock content %}

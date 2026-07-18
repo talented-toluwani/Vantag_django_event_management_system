@@ -108,10 +108,15 @@ def delete_event(request, pk):
 @admin_required
 def cancel_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
+    registration_count = Registration.filter(
+        event=event,
+        status='active'
+    ).count()
 
     if request.method == "GET":
         context = {
-            'event': event
+            'event': event,
+            ' registration_count': registration_count,
         }
         return render(request, 'events/cancel_event.html', context)
     
@@ -277,10 +282,13 @@ def events_category(request, pk):
         is_cancelled = False,
         category = category,
         ).order_by('date')
+    
+    event_count = Event.objects.filter(category=category, is_cancelled=False).count()
 
     context = {
         'category': category,
         'event': event,
+        'event_count':event_count,
     }
 
     return render(request, 'events/events_category.html', context)

@@ -1,1 +1,22 @@
 {% extends "base.html" %}
+
+{% block title %} Events by Category {{ category.name }} {% endblock title %} 
+
+{% block content %}
+
+<h1>Events Category</h1>
+<p>{{ category.description }}</p>
+
+<p>{{ event_count }} exists in this event category </p>
+
+{% for event in events %}
+   {% include "events/_event_card.html" %}
+{% empty %}
+<p>No events available in this category yet</p>
+<a href="{% url 'event-list' %}">List of events</a>
+{% endfor %}
+
+<!-- Naviagtion Links -->
+<a href="{% url 'event-list' %}">List of events</a>
+
+{% endblock content %}
