@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %} My Events {% endblock  %}
+
+{% block content %}
+
+<h1> My Registered Events </h1>
+
+{% for event in events  %}
+    {% include 'events/_event_card.html' %}
+    <!-- extra template-specific details go here, after the include -->
+    <p> {{ event.description }}</p>
+{% empty %}
+<p>You are yet to register for any event</p>
+
+{% endfor %}
+   
+<a href="{% url 'event-list' %}"> Back to Event List</a>
+
+{% endblock content %}
