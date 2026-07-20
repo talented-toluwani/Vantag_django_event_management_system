@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Account Creation{% endblock title %}
+
+{% block content %} 
+<!-- Displays form errors at the top-->
+{{ form.non_field_errors }}
+
+<h1>Create your Vantag Account</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Account or Signup </button>
+</form>
+
+<!-- Redirect Link-->
+<p>You already have an Account? Login through the link below.</p>
+<a href="{% url 'login' %}">Login</a>
+
+{% endblock content %} 
