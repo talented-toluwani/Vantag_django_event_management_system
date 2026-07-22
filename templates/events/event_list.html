@@ -9,17 +9,15 @@
 <div class = "event-container">
     <nav class = "sub-nav">
         {% if request.user.is_staff %}
-        <a href="{% url'event-create' %}"> Create Event </a>
+            <a href="{% url 'event-create' %}"> Create Event </a>
         {% endif %}
 
 {% for event in events %}
     {% include 'events/_event_card.html' %}
-
 <!-- extra template-specific details go here, after the include -->
     <p> {{ event.description }}</p>
 {% empty %}
 <p>No events available </p>
-
 {% endfor %}
 
 </div>
