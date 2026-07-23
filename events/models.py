@@ -35,7 +35,11 @@ class Registration(models.Model):
     status = models.CharField(max_length=20, choices= STATUS_CHOICES, default="active")
 
     class Meta:
-        unique_together = ("event", "participant")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['event', 'participant'],
+                name='unique_event_participant'
+            )
+        ] #sets constraints so that no participants appears more than once for an event
 
-    def __str__(self):
-        return f"{self.participant} - {self.event}"
+       
